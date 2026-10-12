@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 产业链全景图 v1.0</title>
+<style>
+  :root {
+    /* Neutral ramp */
+    --n-50:  #f7f7f8;
+    --n-100: #ededf0;
+    --n-200: #d8d8de;
+    --n-300: #b4b4be;
+    --n-400: #8e8e9e;
+    --n-500: #6b6b7e;
+    --n-600: #52525f;
+    --n-700: #3a3a44;
+    --n-800: #252530;
+    --n-900: #14141c;
+
+    /* Accent — indigo */
+    --a-100: #e8e9ff;
+    --a-200: #c7caff;
+    --a-300: #9ea3ff;
+    --a-400: #6b72f5;
+    --a-500: #4a52e8;
+    --a-600: #3540cc;
+
+    /* Semantic */
+    --c-us:      #3b82f6;  /* blue  — US */
+    --c-cn:      #ef4444;  /* red   — CN */
+    --c-t1:      #4a52e8;
+    --c-t2:      #8e8e9e;
+    --c-t3:      #b4b4be;
+    --c-open:    #10b981;  /* open source */
+
+    --surface:   var(--n-50);
+    --raised:    #ffffff;
+    --border:    var(--n-200);
+    --text-body: var(--n-800);
+    --text-muted: var(--n-500);
+
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 16px;
+
+    --font: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--surface);
+    color: var(--text-body);
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 32px 24px 64px;
+  }
+
+  /* ── Header ── */
+  .header {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--n-900);
+    letter-spacing: -.3px;
+  }
+  .header .meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+  .header .meta span { display: block; }
+
+  /* ── Legend ── */
+  .legend {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 12px 16px;
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Layer ── */
+  .layer {
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    background: var(--raised);
+    overflow: hidden;
+  }
+  .layer-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--n-100);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .layer-header:hover { background: var(--n-200); }
+  .layer-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    min-width: 28px;
+  }
+  .layer-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--n-900);
+    flex: 1;
+  }
+  .layer-sublabel {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .layer-toggle {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 200ms ease;
+    line-height: 1;
+  }
+  .layer.collapsed .layer-toggle { transform: rotate(-90deg); }
+  .layer-body {
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 300ms ease;
+  }
+  .layer.collapsed .layer-body { max-height: 0 !important; }
+
+  /* ── Sub-layer (L4 sub-sections) ── */
+  .sublayer {
+    border-top: 1px solid var(--border);
+    padding: 12px 20px 0;
+  }
+  .sublayer:first-child { border-top: none; }
+  .sublayer-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+  }
+
+  /* ── Region columns ── */
+  .region-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 16px 20px 20px;
+  }
+  .region-grid.single { grid-template-columns: 1fr; }
+  .region-col + .region-col {
+    border-left: 1px solid var(--border);
+    padding-left: 20px;
+    margin-left: 0;
+  }
+  .region-col:first-child { padding-right: 20px; }
+  .region-flag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .region-flag.us { color: var(--c-us); }
+  .region-flag.cn { color: var(--c-cn); }
+  .region-flag.global { color: var(--text-muted); }
+
+  /* ── Company card ── */
+  .company-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .company {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .company-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    background: var(--n-50);
+    transition: background 150ms;
+  }
+  .company-header:hover { background: var(--n-100); }
+  .tier-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .tier-badge.t1 { background: var(--a-100); color: var(--a-600); }
+  .tier-badge.t2 { background: var(--n-100); color: var(--n-600); }
+  .tier-badge.t3 { background: var(--n-50);  color: var(--n-400); border: 1px solid var(--border); }
+  .tier-badge.open { background: #d1fae5; color: #065f46; }
+
+  .company-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--n-900);
+    flex: 1;
+  }
+  .company-name .en {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-left: 4px;
+  }
+  .valuation-chip {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .valuation-chip.stale::after {
+    content: ' ⚠️';
+    font-size: 10px;
+  }
+  .company-expand-btn {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: transform 200ms ease;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .company.open .company-expand-btn { transform: rotate(180deg); }
+
+  .company-detail {
+    display: none;
+    padding: 0 12px 12px;
+    border-top: 1px solid var(--border);
+    background: var(--raised);
+  }
+  .company.open .company-detail { display: block; }
+
+  .detail-row {
+    display: flex;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--n-100);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key {
+    color: var(--text-muted);
+    min-width: 72px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .detail-val { color: var(--text-body); flex: 1; }
+  .detail-val a {
+    color: var(--a-500);
+    text-decoration: none;
+  }
+  .detail-val a:hover { text-decoration: underline; }
+  .detail-val a:focus-visible {
+    outline: 2px solid var(--a-400);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .milestones { display: flex; flex-direction: column; gap: 4px; }
+  .milestone {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .ms-icon { flex-shrink: 0; }
+  .ms-date {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 54px;
+    flex-shrink: 0;
+  }
+
+  .note {
+    margin-top: 6px;
+    padding: 5px 8px;
+    background: #fef9c3;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #713f12;
+  }
+
+  /* ── Open source special ── */
+  .oss-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 0 8px;
+  }
+  .oss-chip {
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid #a7f3d0;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 150ms;
+  }
+  .oss-chip:hover { background: #a7f3d0; }
+
+  /* ── Version bar ── */
+  .version-bar {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    padding: 10px 16px;
+    background: var(--raised);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .version-bar strong { color: var(--text-body); }
+
+  /* ── Focus states ── */
+  .layer-header:focus-visible,
+  .company-header:focus-visible {
+    outline: 2px solid var(--a-400);
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 700px) {
+    .region-grid { grid-template-columns: 1fr; }
+    .region-col + .region-col {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      padding-left: 0;
+      padding-top: 16px;
+      margin-top: 8px;
+    }
+    .region-col:first-child { padding-right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🗺 AI 产业链全景图</h1>
+  <div class="meta">
+    <span><strong>v1.0</strong> · 2026-10</span>
+    <span>中美双轨 · Tier 排序 · 月度更新</span>
+  </div>
+</div>
+
+<div class="version-bar">
+  <span><strong>版本:</strong> v1.0</span>
+  <span><strong>更新日期:</strong> 2026-10-12</span>
+  <span><strong>排序:</strong> 同层按 Tier 分组 → Tier 内按硬数值降序</span>
+  <span><strong>⚠️</strong> 估值超12个月标黄</span>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-t1)"></div> T1 领导者</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-t2)"></div> T2 主要玩家</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-t3)"></div> T3 挑战者</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--c-open)"></div> 开源生态</div>
+  <div class="legend-item"><span>📦</span> 产品发布</div>
+  <div class="legend-item"><span>💰</span> 融资事件</div>
+  <div class="legend-item"><span>🔬</span> 技术里程碑</div>
+  <div class="legend-item"><span>🤝</span> 并购/战略</div>
+</div>
+
+<!-- ═══════════════ L1 ═══════════════ -->
+<div class="layer" id="l1">
+  <div class="layer-header" onclick="toggleLayer('l1')" tabindex="0" role="button" aria-expanded="true">
+    <span class="layer-label">L1</span>
+    <span class="layer-title">硬件基础层</span>
+    <span class="layer-sublabel">AI 芯片 / HBM / 晶圆代工</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l1-body">
+
+    <!-- L1-A 芯片 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L1-A · AI 训练 / 推理芯片（GPU / NPU / ASIC）</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+
+            <div class="company" id="c-nvda">
+              <div class="company-header" onclick="toggleCompany('c-nvda')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">英伟达 <span class="en">NVIDIA</span></span>
+                <span class="valuation-chip">市值 ~$3.3万亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$3.3万亿（含非AI业务）· 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/nvda" target="_blank">NASDAQ: NVDA</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球AI算力芯片绝对主导，H系列/B系列GPU占数据中心AI训练约80%份额</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">1999</span><span>发明GPU概念，后成为深度学习核心硬件</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2016-04</span><span>Pascal架构发布，正式进入深度学习市场</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2022-09</span><span>H100发布，确立AI训练霸主地位</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-03</span><span>Blackwell（B200）架构发布</span></div>
+                      <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2024-06</span><span>市值首次突破$3万亿，超越苹果</span></div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="company" id="c-amd">
+              <div class="company-header" onclick="toggleCompany('c-amd')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">AMD</span>
+                <span class="valuation-chip">市值 ~$2000亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$2000亿 · 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/amd" target="_blank">NASDAQ: AMD</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">GPU AI芯片第二梯队，MI300X系列主攻推理市场</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-12</span><span>MI300X发布，正式进军AI推理市场</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-11</span><span>MI325X发布</span></div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="company" id="c-google-tpu">
+              <div class="company-header" onclick="toggleCompany('c-google-tpu')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Google <span class="en">TPU</span></span>
+                <span class="valuation-chip">Alphabet ~$2.1万亿*</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Alphabet市值 ~$2.1万亿（含非AI业务）· <a href="https://www.nasdaq.com/market-activity/stocks/googl" target="_blank">NASDAQ: GOOGL</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">自研TPU仅供内部使用，通过GCP向外提供TPU云算力服务</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2016-05</span><span>TPU首次公开，用于AlphaGo对弈</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-08</span><span>TPU v5e发布，面向大规模推理</span></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="note">* 市值含搜索/广告/云等非AI业务，AI芯片部分无单独披露</div>
+              </div>
+            </div>
+
+            <div class="company" id="c-intel-gaudi">
+              <div class="company-header" onclick="toggleCompany('c-intel-gaudi')" tabindex="0">
+                <span class="tier-badge t3">T3</span>
+                <span class="company-name">Intel <span class="en">Gaudi</span></span>
+                <span class="valuation-chip">市值 ~$900亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$900亿 · 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/intc" target="_blank">NASDAQ: INTC</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Gaudi系列AI加速器，市场份额较低，处于追赶状态</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-11</span><span>Gaudi 3发布</span></div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+
+            <div class="company" id="c-huawei-npu">
+              <div class="company-header" onclick="toggleCompany('c-huawei-npu')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">华为昇腾 <span class="en">Ascend</span></span>
+                <span class="valuation-chip">非上市</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">整体未上市，估值不公开 · <a href="https://www.huawei.com/cn/" target="_blank">华为官网</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">中国AI芯片最强自研，昇腾910B/910C系列，国内唯一可与NVIDIA H100对标的方案</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2019-08</span><span>昇腾910发布</span></div>
+                      <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2023-08</span><span>昇腾910B量产，国内厂商开始大规模采购替代H800</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024</span><span>昇腾910C流片/批量出货（传闻，待一级信源确认）</span></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="note">⚠️ 华为横跨L1/L2/L3/L7，各层均有节点</div>
+              </div>
+            </div>
+
+            <div class="company" id="c-cambricon">
+              <div class="company-header" onclick="toggleCompany('c-cambricon')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">寒武纪 <span class="en">Cambricon</span></span>
+                <span class="valuation-chip">市值 ~¥1200亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~¥1200亿 · 2026-09 · <a href="https://www.sse.com.cn/" target="_blank">科创板 688256</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内AI芯片上市第一股，云端+边缘端NPU，下游客户以国资算力为主</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2020-07</span><span>科创板上市</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023</span><span>MLU370系列推出</span></div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="company" id="c-biren">
+              <div class="company-header" onclick="toggleCompany('c-biren')" tabindex="0">
+                <span class="tier-badge t3">T3</span>
+                <span class="company-name">壁仞 / 摩尔线程 / 天数智芯</span>
+                <span class="valuation-chip">新兴挑战者</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内GPU新势力，融资数据来源：<a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+                <div class="detail-row"><span class="detail-key">备注</span><span class="detail-val">三家路线各异（壁仞GPGPU、摩尔线程消费+云、天数智芯训练），估值待细化</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L1-B HBM -->
+    <div class="sublayer">
+      <div class="sublayer-title">L1-B · HBM 高带宽内存</div>
+      <div class="region-grid single">
+        <div class="region-col">
+          <div class="region-flag global">🌏 全球（韩国主导）</div>
+          <div class="company-list">
+            <div class="company" id="c-skhynix">
+              <div class="company-header" onclick="toggleCompany('c-skhynix')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">SK Hynix</span>
+                <span class="valuation-chip">市值 ~₩100万亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">HBM3E市场份额约50%+，NVIDIA最优先供应商，技术领先三星约一代</span></div>
+                <div class="detail-row"><span class="detail-key">信源</span><span class="detail-val"><a href="https://www.skhynix.com/" target="_blank">SK Hynix官网</a> / <a href="https://finance.yahoo.com/quote/000660.KS/" target="_blank">KRX: 000660</a></span></div>
+              </div>
+            </div>
+            <div class="company" id="c-samsung-hbm">
+              <div class="company-header" onclick="toggleCompany('c-samsung-hbm')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Samsung 三星</span>
+                <span class="valuation-chip">市值 ~₩350万亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">HBM3E第二供应商，2024年曾因良品率问题延迟供货NVIDIA，目前已修复</span></div>
+                <div class="detail-row"><span class="detail-key">信源</span><span class="detail-val"><a href="https://finance.yahoo.com/quote/005930.KS/" target="_blank">KRX: 005930</a></span></div>
+              </div>
+            </div>
+            <div class="company" id="c-micron">
+              <div class="company-header" onclick="toggleCompany('c-micron')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Micron 美光</span>
+                <span class="valuation-chip">市值 ~$1200亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">HBM3E后进入，2024年开始放量，唯一美国本土HBM供应商</span></div>
+                <div class="detail-row"><span class="detail-key">信源</span><span class="detail-val"><a href="https://www.nasdaq.com/market-activity/stocks/mu" target="_blank">NASDAQ: MU</a></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L1-C 晶圆 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L1-C · 晶圆代工</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag" style="color:#6b6b7e">🇹🇼 台湾</div>
+          <div class="company-list">
+            <div class="company" id="c-tsmc">
+              <div class="company-header" onclick="toggleCompany('c-tsmc')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">台积电 <span class="en">TSMC</span></span>
+                <span class="valuation-chip">市值 ~$1万亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$1万亿 · 2026-09 · <a href="https://finance.yahoo.com/quote/TSM/" target="_blank">NYSE: TSM</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球先进制程（3nm/2nm）几乎垄断，所有主流AI芯片代工主力（NVIDIA/AMD/Apple/Google TPU）</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2022</span><span>3nm量产，NVIDIA H100采用4nm N4工艺</span></div>
+                      <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024</span><span>2nm工艺（N2）量产计划推进</span></div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-smic">
+              <div class="company-header" onclick="toggleCompany('c-smic')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">中芯国际 <span class="en">SMIC</span></span>
+                <span class="valuation-chip">市值 ~¥1400亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~¥1400亿 · 2026-09 · <a href="https://www.hkex.com.hk/" target="_blank">港股 00981 / 科创板 688981</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">最先进量产N+2（约7nm等效），受美出口管制限制，无法获得EUV光刻机</span></div>
+                <div class="detail-row">
+                  <span class="detail-key">里程碑</span>
+                  <span class="detail-val">
+                    <div class="milestones">
+                      <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2023-08</span><span>华为Mate 60 Pro搭载SMIC 7nm芯片，震惊业界</span></div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /layer-body -->
+</div>
+
+<!-- ═══════════════ L5 基础大模型层（示范性展开）═══════════════ -->
+<div class="layer" id="l5">
+  <div class="layer-header" onclick="toggleLayer('l5')" tabindex="0" role="button" aria-expanded="true">
+    <span class="layer-label">L5</span>
+    <span class="layer-title">基础大模型层</span>
+    <span class="layer-sublabel">通用大模型（仅收录有独立模型能力的公司）</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l5-body">
+    <div class="region-grid" style="padding:16px 20px 20px">
+      <div class="region-col">
+        <div class="region-flag us">🇺🇸 美国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-openai">
+            <div class="company-header" onclick="toggleCompany('c-openai')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">OpenAI</span>
+              <span class="valuation-chip">估值 ~$3000亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$3000亿 · 2025-10 · <a href="https://www.wsj.com/" target="_blank">WSJ报道（软银领投）</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球最高知名度AI公司，GPT系列定义大模型时代，ChatGPT MAU 3亿+（2025）</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2015</span><span>Sam Altman、Elon Musk等联合创立</span></div>
+                    <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2017</span><span>提出Transformer架构基础论文"Attention is All You Need"（Google共同署名）</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2020-06</span><span>GPT-3发布，175B参数，震惊AI学界</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2022-11</span><span>ChatGPT发布，5天达100万用户，引爆全球AI浪潮</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-03</span><span>GPT-4发布，多模态能力大幅跃升</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-02</span><span>Sora发布，文生视频里程碑</span></div>
+                    <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2023</span><span>Elon Musk诉讼离队，创立xAI</span></div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="company" id="c-anthropic">
+            <div class="company-header" onclick="toggleCompany('c-anthropic')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Anthropic</span>
+              <span class="valuation-chip">估值 ~$610亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$610亿 · 2025-03 · <a href="https://www.crunchbase.com/organization/anthropic" target="_blank">Crunchbase</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">安全优先AI公司，Claude系列模型，主要客户群为企业API，AWS/Google双重战略投资</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2021</span><span>Dario Amodei等OpenAI团队出走创立</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-03</span><span>Claude 1发布</span></div>
+                    <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024-03</span><span>Claude 3系列发布，Opus在多项基准首次超越GPT-4</span></div>
+                    <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2023</span><span>Amazon投资$40亿，成为AWS核心AI合作伙伴</span></div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="company" id="c-xai">
+            <div class="company-header" onclick="toggleCompany('c-xai')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">xAI</span>
+              <span class="valuation-chip">估值 ~$500亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$500亿 · 2025-05 · <a href="https://www.bloomberg.com/" target="_blank">Bloomberg</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Elon Musk创立，Grok系列模型，强绑定X平台数据，算力自建（孟菲斯Colossus集群）</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2023-07</span><span>Elon Musk创立xAI</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-11</span><span>Grok-1发布</span></div>
+                    <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024-09</span><span>Memphis Colossus集群10万张H100上线，全球最大单体GPU集群</span></div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="company" id="c-meta-ai">
+            <div class="company-header" onclick="toggleCompany('c-meta-ai')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">Meta AI</span>
+              <span class="valuation-chip">Meta市值 ~$1.4万亿*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Meta市值 ~$1.4万亿（含社交业务）· <a href="https://www.nasdaq.com/market-activity/stocks/meta" target="_blank">NASDAQ: META</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">开源策略，Llama系列定义开源大模型标准，下载量全球第一，AI研发投入超$600亿/年</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-02</span><span>LLaMA开源，引爆开源大模型生态</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-04</span><span>Llama 3发布，开源模型对标闭源水准</span></div>
+                  </div>
+                </span>
+              </div>
+              <div class="note">* 市值含Facebook/Instagram/WhatsApp等非AI业务，AI部分无单独披露</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="region-col">
+        <div class="region-flag cn">🇨🇳 中国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-deepseek">
+            <div class="company-header" onclick="toggleCompany('c-deepseek')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">DeepSeek</span>
+              <span class="valuation-chip">未融资/估值未公开</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">幻方量化全资子公司，未独立融资，估值无公开披露</span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内技术最领先的开源大模型，以极低算力成本达到GPT-4级别性能，全球影响力最强的中国AI公司</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-11</span><span>DeepSeek-Coder发布</span></div>
+                    <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024-12</span><span>DeepSeek-V3发布，671B MoE，成本仅$600万</span></div>
+                    <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2025-01</span><span>DeepSeek-R1发布，推理能力对标o1，全球刷屏</span></div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="company" id="c-moonshot">
+            <div class="company-header" onclick="toggleCompany('c-moonshot')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">月之暗面 <span class="en">Moonshot AI</span></span>
+              <span class="valuation-chip">估值 ~$33亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$33亿 · 2025-02 B轮 · <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Kimi系列，以超长上下文（128K→1M tokens）差异化，杨植麟创立，国内C端用户渗透率较高</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2023-03</span><span>创立，A轮融资</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-10</span><span>Kimi Chat发布，支持20万字上下文</span></div>
+                    <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024-03</span><span>Kimi开放100万token上下文，全球最长之一</span></div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="company" id="c-zhipu">
+            <div class="company-header" onclick="toggleCompany('c-zhipu')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">智谱AI</span>
+              <span class="valuation-chip">估值 ~$30亿+</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$30亿+ · 2024年战略融资 · <a href="https://www.tianyancha.com/" target="_blank">企查查</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">清华系，GLM系列，学术背景最强，国内最早一批开源大模型，B端客户为主</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2019</span><span>由清华大学计算机系知识工程团队孵化</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-06</span><span>ChatGLM2-6B开源</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-01</span><span>GLM-4发布，多模态能力升级</span></div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="company" id="c-baidu-ernie">
+            <div class="company-header" onclick="toggleCompany('c-baidu-ernie')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">百度文心 <span class="en">ERNIE</span></span>
+              <span class="valuation-chip">百度市值 ~¥1700亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">百度市值 ~¥1700亿（含搜索/云等业务）· <a href="https://www.hkex.com.hk/" target="_blank">港股 09888</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内最早发布大模型的大厂，文心一言/ERNIE Bot，深度绑定搜索场景，AI API调用量大</span></div>
+              <div class="detail-row">
+                <span class="detail-key">里程碑</span>
+                <span class="detail-val">
+                  <div class="milestones">
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-03</span><span>文心一言发布，国内最早对标ChatGPT的产品</span></div>
+                    <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-04</span><span>文心大模型4.0 Turbo发布</span></div>
+                  </div>
+                </span>
+              </div>
+              <div class="note">* 市值含搜索/地图/云等非AI业务，AI部分无单独披露</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ L2-L4 L6-L7 占位层 ═══════════════ -->
+<div class="layer collapsed" id="l2">
+  <div class="layer-header" onclick="toggleLayer('l2')" tabindex="0" role="button" aria-expanded="false">
+    <span class="layer-label">L2</span>
+    <span class="layer-title">算力基建层</span>
+    <span class="layer-sublabel">数据中心 / 服务器 / 光模块 / 液冷 / 电力</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l2-body" style="max-height:0">
+    <div class="region-grid" style="padding:16px 20px 20px">
+      <div class="region-col">
+        <div class="region-flag us">🇺🇸 美国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-supermicro">
+            <div class="company-header" onclick="toggleCompany('c-supermicro')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Super Micro <span class="en">Supermicro</span></span>
+              <span class="valuation-chip">市值 ~$250亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$250亿 · 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/smci" target="_blank">NASDAQ: SMCI</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI服务器最大独立ODM，NVIDIA GPU服务器主要组装商，液冷技术领先，大客户含各大云厂商</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023</span><span>随AI算力爆发股价涨超10倍，成标志性受益股</span></div>
+                <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024</span><span>推出直接液冷（DLC）AI服务器，支持H100/H200机柜</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-dell-ai">
+            <div class="company-header" onclick="toggleCompany('c-dell-ai')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Dell Technologies</span>
+              <span class="valuation-chip">市值 ~$700亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$700亿 · 2026-09 · <a href="https://www.nyse.com/quote/XNYS:DELL" target="_blank">NYSE: DELL</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">企业级AI服务器重要供应商，PowerEdge AI系列，企业客户覆盖广，兼具存储和网络集成能力</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023</span><span>PowerEdge XE9680发布，8卡H100旗舰AI服务器</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-arista">
+            <div class="company-header" onclick="toggleCompany('c-arista')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">Arista Networks</span>
+              <span class="valuation-chip">市值 ~$1200亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$1200亿 · 2026-09 · <a href="https://www.nyse.com/quote/XNYS:ANET" target="_blank">NYSE: ANET</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI数据中心网络交换机头部供应商，大模型训练集群互联主力，Meta/Microsoft主要网络供应商</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024</span><span>发布AI专用以太网交换机产品线，对抗InfiniBand</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-vertiv">
+            <div class="company-header" onclick="toggleCompany('c-vertiv')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">Vertiv</span>
+              <span class="valuation-chip">市值 ~$400亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$400亿 · 2026-09 · <a href="https://www.nyse.com/quote/XNYS:VRT" target="_blank">NYSE: VRT</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">数据中心电力管理和液冷基础设施领导者，AI算力密度提升的直接受益者</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="region-col">
+        <div class="region-flag cn">🇨🇳 中国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-inspur">
+            <div class="company-header" onclick="toggleCompany('c-inspur')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">浪潮信息 <span class="en">Inspur</span></span>
+              <span class="valuation-chip">市值 ~¥800亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~¥800亿 · 2026-09 · <a href="https://www.sse.com.cn/" target="_blank">深交所 000977</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内AI服务器最大供应商，下游覆盖互联网大厂和国资算力，GPU服务器市场份额第一</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023</span><span>NF5488A5（8卡H800）大规模出货，成国内最畅销AI服务器</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-huawei-server">
+            <div class="company-header" onclick="toggleCompany('c-huawei-server')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">华为（服务器/Atlas）</span>
+              <span class="valuation-chip">非上市</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">整体未上市 · <a href="https://www.huawei.com/cn/" target="_blank">华为官网</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Atlas 900系列AI训练集群，搭载昇腾910B，国资智算中心主要供货商之一，同时布局液冷</span></div>
+              <div class="detail-row"><span class="detail-key">备注</span><span class="detail-val">横跨L1/L2/L3，此处为服务器和集群节点</span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-zhongji">
+            <div class="company-header" onclick="toggleCompany('c-zhongji')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">中际旭创 <span class="en">Zhongji Innolight</span></span>
+              <span class="valuation-chip">市值 ~¥1200亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~¥1200亿 · 2026-09 · <a href="https://www.sse.com.cn/" target="_blank">深交所 300308</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球光模块龙头之一，800G/1.6T高速光模块供应AI数据中心，NVIDIA/微软/谷歌均为客户</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-2024</span><span>800G光模块量产出货，AI数据中心光互联主力器件</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-tianfu">
+            <div class="company-header" onclick="toggleCompany('c-tianfu')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">新华三 / 科华数据</span>
+              <span class="valuation-chip">—</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">新华三（紫光旗下）：国内网络和服务器二线供应商；科华数据（002335）：数据中心UPS/电力+液冷</span></div>
+              <div class="detail-row"><span class="detail-key">信源</span><span class="detail-val"><a href="https://www.szse.cn/" target="_blank">科华数据 深交所 002335</a></span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layer collapsed" id="l3">
+  <div class="layer-header" onclick="toggleLayer('l3')" tabindex="0" role="button" aria-expanded="false">
+    <span class="layer-label">L3</span>
+    <span class="layer-title">云与算力平台层</span>
+    <span class="layer-sublabel">公有云 AI / 智算中心（含国资）</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l3-body" style="max-height:0">
+    <div class="region-grid" style="padding:16px 20px 20px">
+      <div class="region-col">
+        <div class="region-flag us">🇺🇸 美国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-aws">
+            <div class="company-header" onclick="toggleCompany('c-aws')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">AWS <span class="en">Amazon Web Services</span></span>
+              <span class="valuation-chip">Amazon市值 ~$2.2万亿*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Amazon市值 ~$2.2万亿（含电商等业务）· 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/amzn" target="_blank">NASDAQ: AMZN</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球最大云厂商，AI算力云市场份额约30%，Bedrock提供多模型API，Trainium/Inferentia自研芯片，战略投资Anthropic $40亿</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-11</span><span>Amazon Bedrock GA，多模型托管平台</span></div>
+                <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2023</span><span>投资Anthropic $40亿，成AWS核心AI合作伙伴</span></div>
+              </div></span></div>
+              <div class="note">* 市值含电商/物流等非云业务，AWS云收入约占Amazon总营收18%</div>
+            </div>
+          </div>
+
+          <div class="company" id="c-azure">
+            <div class="company-header" onclick="toggleCompany('c-azure')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Microsoft Azure</span>
+              <span class="valuation-chip">Microsoft市值 ~$3.1万亿*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Microsoft市值 ~$3.1万亿 · 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/msft" target="_blank">NASDAQ: MSFT</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI云市场份额约25%，OpenAI独家云合作伙伴，Azure OpenAI Service是企业接入GPT的主要通道，Copilot全线产品整合</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2019-2023</span><span>累计投资OpenAI超$130亿，获独家云部署权</span></div>
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-02</span><span>Bing Chat（现Copilot）发布，ChatGPT整合搜索</span></div>
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-11</span><span>Microsoft 365 Copilot正式GA，企业AI助手</span></div>
+              </div></span></div>
+              <div class="note">* 市值含Office/Windows/Xbox等非云业务</div>
+            </div>
+          </div>
+
+          <div class="company" id="c-gcp">
+            <div class="company-header" onclick="toggleCompany('c-gcp')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Google Cloud <span class="en">GCP</span></span>
+              <span class="valuation-chip">Alphabet市值 ~$2.1万亿*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Alphabet市值 ~$2.1万亿 · 2026-09 · <a href="https://www.nasdaq.com/market-activity/stocks/googl" target="_blank">NASDAQ: GOOGL</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">云市场份额约11%，AI技术底蕴最深（自研TPU/Gemini），Vertex AI平台，战略投资Anthropic</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-12</span><span>Gemini发布，Google自研大模型整合云服务</span></div>
+                <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2023</span><span>投资Anthropic约$3亿，战略云合作</span></div>
+              </div></span></div>
+              <div class="note">* 市值含搜索/广告等非云业务</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="region-col">
+        <div class="region-flag cn">🇨🇳 中国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-alicloud">
+            <div class="company-header" onclick="toggleCompany('c-alicloud')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">阿里云 <span class="en">Alibaba Cloud</span></span>
+              <span class="valuation-chip">阿里巴巴市值 ~¥2000亿*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">阿里巴巴市值 ~¥2000亿（港股+美股）· 2026-09 · <a href="https://www.hkex.com.hk/" target="_blank">港股 09988</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内云市场份额第一约36%，通义千问自研大模型，PAI平台提供AI训练/推理服务，开源策略积极</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-04</span><span>通义千问发布，阿里大模型正式入场</span></div>
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-09</span><span>Qwen2.5系列开源，多项榜单领先</span></div>
+              </div></span></div>
+              <div class="note">* 市值含电商/物流/本地生活等非云业务</div>
+            </div>
+          </div>
+
+          <div class="company" id="c-huaweicloud">
+            <div class="company-header" onclick="toggleCompany('c-huaweicloud')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">华为云 <span class="en">Huawei Cloud</span></span>
+              <span class="valuation-chip">非上市</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">华为整体未上市 · <a href="https://www.huaweicloud.com/" target="_blank">华为云官网</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内云市场份额约18%，政务/金融/央企客户最强，盘古大模型，全栈自研（芯片+服务器+云），国资智算中心首选供应商</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-07</span><span>盘古大模型3.0发布，行业大模型策略</span></div>
+              </div></span></div>
+              <div class="note">华为横跨L1/L2/L3，此处为云平台节点</div>
+            </div>
+          </div>
+
+          <div class="company" id="c-volcengine">
+            <div class="company-header" onclick="toggleCompany('c-volcengine')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">火山引擎 <span class="en">Volcengine</span></span>
+              <span class="valuation-chip">字节跳动非上市*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">字节跳动整体估值 ~$2200亿（2024一级市场）· <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">字节跳动云品牌，豆包大模型API对外开放，GPU算力价格战发起者（2024年大幅降价），增速最快的国内云之一</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-05</span><span>豆包大模型API开放，定价远低于竞争对手，引发价格战</span></div>
+              </div></span></div>
+              <div class="note">* 字节跳动未独立上市，云业务无单独估值披露</div>
+            </div>
+          </div>
+
+          <div class="company" id="c-tencentcloud">
+            <div class="company-header" onclick="toggleCompany('c-tencentcloud')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">腾讯云</span>
+              <span class="valuation-chip">腾讯市值 ~¥3.5万亿*</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">腾讯市值 ~¥3.5万亿 · 2026-09 · <a href="https://www.hkex.com.hk/" target="_blank">港股 00700</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内云市场份额约16%，混元大模型，企业微信/游戏AI整合，C端渗透通过微信AI入口</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-09</span><span>混元大模型发布</span></div>
+              </div></span></div>
+              <div class="note">* 市值含游戏/社交/投资等非云业务</div>
+            </div>
+          </div>
+
+          <div class="company" id="c-guozi">
+            <div class="company-header" onclick="toggleCompany('c-guozi')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">国资智算中心</span>
+              <span class="valuation-chip">政策主导</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">各省市政府主导建设，如上海人工智能公共算力平台、武汉人工智能计算中心等，算力以昇腾为主，不参与市场排序</span></div>
+              <div class="detail-row"><span class="detail-key">备注</span><span class="detail-val">中国产业链特有结构，无对应美国实体，是国内AI基建的重要组成部分但非商业化主体</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layer collapsed" id="l4">
+  <div class="layer-header" onclick="toggleLayer('l4')" tabindex="0" role="button" aria-expanded="false">
+    <span class="layer-label">L4</span>
+    <span class="layer-title">数据与工具链层</span>
+    <span class="layer-sublabel">数据标注 / 推理优化 / 向量数据库 / Agent框架 / 开源生态</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l4-body" style="max-height:0">
+    <!-- L4-A 数据标注 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L4-A · 数据标注 / 合成数据</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-scaleai">
+              <div class="company-header" onclick="toggleCompany('c-scaleai')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Scale AI</span>
+                <span class="valuation-chip">估值 ~$140亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$140亿 · 2024-05 · <a href="https://www.crunchbase.com/organization/scale-ai" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球最大AI数据标注平台，OpenAI/Meta/DoD均为客户，RLHF数据供应核心环节，近年转向合成数据和评估</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2021</span><span>E轮估值$73亿，Alexandr Wang成最年轻白手起家亿万富翁</span></div>
+                  <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2024</span><span>Meta投资$14.3亿，获Scale AI约9%股份</span></div>
+                </div></span></div>
+              </div>
+            </div>
+            <div class="company" id="c-labelbox">
+              <div class="company-header" onclick="toggleCompany('c-labelbox')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Labelbox</span>
+                <span class="valuation-chip">估值 ~$10亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$10亿 · 2022 · <a href="https://www.crunchbase.com/organization/labelbox" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">数据标注平台，偏企业自建数据管道，与Scale AI形成差异化竞争</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-datang">
+              <div class="company-header" onclick="toggleCompany('c-datang')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">数据堂 <span class="en">DataTang</span></span>
+                <span class="valuation-chip">市值 ~¥20亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~¥20亿 · 2026-09 · <a href="https://www.sse.com.cn/" target="_blank">创业板 300363</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内AI数据服务上市公司，语音/图像/文本标注，下游为国内大模型公司和自动驾驶</span></div>
+              </div>
+            </div>
+            <div class="company" id="c-aidata">
+              <div class="company-header" onclick="toggleCompany('c-aidata')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Appen（中国区）/ 灵云 / 云测数据</span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内数据标注服务商第二梯队，竞争激烈，利润率低，部分已转型合成数据生成</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L4-B 推理优化 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L4-B · 推理优化 / 部署框架</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-anyscale">
+              <div class="company-header" onclick="toggleCompany('c-anyscale')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Anyscale / Ray</span>
+                <span class="valuation-chip">估值 ~$10亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$10亿 · 2023 · <a href="https://www.crunchbase.com/organization/anyscale" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Ray分布式计算框架商业化，AI训练/推理分布式调度，被OpenAI等大量使用</span></div>
+              </div>
+            </div>
+            <div class="company" id="c-together">
+              <div class="company-header" onclick="toggleCompany('c-together')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Together AI</span>
+                <span class="valuation-chip">估值 ~$11亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$11亿 · 2024-02 · <a href="https://www.crunchbase.com/organization/together-ai" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">开源模型推理云，支持Llama/Mistral等主流开源模型API调用，价格有竞争力</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-siliconflow">
+              <div class="company-header" onclick="toggleCompany('c-siliconflow')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">硅基流动 <span class="en">SiliconFlow</span></span>
+                <span class="valuation-chip">估值 ~$10亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$10亿 · 2024 · <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内最大开源模型推理云，DeepSeek/Qwen等主流模型均在平台上提供API，价格策略激进</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2025-01</span><span>DeepSeek-R1发布后迅速上线，成国内最大R1 API入口之一</span></div>
+                </div></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L4-C 向量数据库 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L4-C · 向量数据库 / 检索</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-pinecone">
+              <div class="company-header" onclick="toggleCompany('c-pinecone')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Pinecone</span>
+                <span class="valuation-chip">估值 ~$7.5亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$7.5亿 · 2023-04 · <a href="https://www.crunchbase.com/organization/pinecone" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">托管向量数据库领导者，RAG场景核心基础设施，企业客户为主</span></div>
+              </div>
+            </div>
+            <div class="company" id="c-weaviate">
+              <div class="company-header" onclick="toggleCompany('c-weaviate')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Weaviate</span>
+                <span class="valuation-chip">估值 ~$2亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$2亿 · 2023 · <a href="https://www.crunchbase.com/organization/weaviate" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">开源向量数据库，云托管+自部署双模，开发者社区活跃</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-milvus">
+              <div class="company-header" onclick="toggleCompany('c-milvus')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Zilliz / Milvus</span>
+                <span class="valuation-chip">估值 ~$1亿+</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Zilliz估值 ~$1亿+ · 2022 · <a href="https://www.crunchbase.com/organization/zilliz" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Milvus开源向量数据库全球下载量最高，Zilliz为商业化公司，中国团队主导的全球影响力项目</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2019</span><span>Milvus开源，成为LF AI基金会首批项目</span></div>
+                </div></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L4-D Agent框架 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L4-D · Agent 框架 / 编排</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-langchain-co">
+              <div class="company-header" onclick="toggleCompany('c-langchain-co')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">LangChain Inc.</span>
+                <span class="valuation-chip">估值 ~$2亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$2亿 · 2023-09 · <a href="https://www.crunchbase.com/organization/langchain" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">LangChain框架商业化主体，LangSmith可观测平台，开发者生态最大的Agent编排工具</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-dify">
+              <div class="company-header" onclick="toggleCompany('c-dify')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Dify.AI</span>
+                <span class="valuation-chip">估值 ~$1亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$1亿 · 2024 · <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内最活跃的开源LLM应用开发平台，GitHub Star增长最快的中国AI开源项目之一，可视化编排</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2023</span><span>开源发布，快速获得全球开发者关注</span></div>
+                </div></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L4-E 开源生态 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L4-E · 开源生态（不参与 Tier 排序，按影响力列出）</div>
+      <div style="padding:4px 0 12px">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">以下项目无传统估值，以 GitHub Stars / 下载量衡量影响力，验证信源：<a href="https://github.com/" target="_blank" style="color:var(--a-500)">GitHub</a> / <a href="https://huggingface.co/" target="_blank" style="color:var(--a-500)">Hugging Face</a></div>
+        <div class="oss-grid">
+          <span class="oss-chip" title="LLM应用编排框架，Stars 90k+">🔗 LangChain</span>
+          <span class="oss-chip" title="数据/LLM框架，Stars 35k+">🦙 LlamaIndex</span>
+          <span class="oss-chip" title="开源模型推理引擎，Stars 25k+，vLLM">⚡ vLLM</span>
+          <span class="oss-chip" title="模型托管和社区，月活500万+开发者">🤗 Hugging Face</span>
+          <span class="oss-chip" title="向量数据库，LF AI项目">🗄 Milvus</span>
+          <span class="oss-chip" title="国内LLM应用平台，Stars 40k+">🛠 Dify</span>
+          <span class="oss-chip" title="分布式ML框架，被OpenAI大规模使用">☀️ Ray</span>
+          <span class="oss-chip" title="Ollama本地模型运行，Stars 85k+">🖥 Ollama</span>
+          <span class="oss-chip" title="Agent编排框架，微软出品">🤖 AutoGen</span>
+          <span class="oss-chip" title="代码生成模型，Salesforce开源">💻 CodeGen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layer collapsed" id="l6">
+  <div class="layer-header" onclick="toggleLayer('l6')" tabindex="0" role="button" aria-expanded="false">
+    <span class="layer-label">L6</span>
+    <span class="layer-title">中间平台层</span>
+    <span class="layer-sublabel">模型API平台 / Fine-tuning / AI基础设施SaaS</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l6-body" style="max-height:0">
+    <div class="region-grid" style="padding:16px 20px 20px">
+      <div class="region-col">
+        <div class="region-flag us">🇺🇸 美国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-replicate">
+            <div class="company-header" onclick="toggleCompany('c-replicate')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Replicate</span>
+              <span class="valuation-chip">估值 ~$3.5亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$3.5亿 · 2023-12 · <a href="https://www.crunchbase.com/organization/replicate" target="_blank">Crunchbase</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">开源模型一键部署云平台，Stable Diffusion/SDXL等图像模型主要托管地，开发者友好API</span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-modal">
+            <div class="company-header" onclick="toggleCompany('c-modal')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Modal</span>
+              <span class="valuation-chip">估值 ~$10亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$10亿 · 2024 · <a href="https://www.crunchbase.com/organization/modal-labs" target="_blank">Crunchbase</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI基础设施SaaS，无服务器GPU计算，开发者可用Python直接调度GPU任务，冷启动速度行业领先</span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-fireworks">
+            <div class="company-header" onclick="toggleCompany('c-fireworks')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">Fireworks AI</span>
+              <span class="valuation-chip">估值 ~$5亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$5亿 · 2024 · <a href="https://www.crunchbase.com/organization/fireworks-ai" target="_blank">Crunchbase</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">高性能推理API平台，主打低延迟，支持Llama/Mixtral等主流开源模型，企业级SLA</span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-huggingface-hub">
+            <div class="company-header" onclick="toggleCompany('c-huggingface-hub')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">Hugging Face</span>
+              <span class="valuation-chip">估值 ~$45亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$45亿 · 2023-08 · <a href="https://www.crunchbase.com/organization/hugging-face" target="_blank">Crunchbase</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI模型托管平台+开发者社区，月活500万+，模型/数据集/Space应用三合一，是开源AI生态的GitHub</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2022</span><span>模型数量突破10万，成为开源模型事实标准平台</span></div>
+                <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2023-08</span><span>D轮$2.35亿，估值$45亿，Google/Amazon/Nvidia均参投</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="region-col">
+        <div class="region-flag cn">🇨🇳 中国</div>
+        <div class="company-list">
+
+          <div class="company" id="c-minimax-api">
+            <div class="company-header" onclick="toggleCompany('c-minimax-api')" tabindex="0">
+              <span class="tier-badge t1">T1</span>
+              <span class="company-name">MiniMax</span>
+              <span class="valuation-chip">估值 ~$25亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$25亿 · 2024 · <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内多模态大模型公司，自研MiniMax-01/abab系列，同时对外提供API，Talkie（海外AI角色扮演）MAU千万级</span></div>
+              <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2025-01</span><span>MiniMax-01发布，456B MoE，长上下文达100万token</span></div>
+              </div></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-modelfun">
+            <div class="company-header" onclick="toggleCompany('c-modelfun')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">ModelScope（魔搭）</span>
+              <span class="valuation-chip">阿里云旗下</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">阿里云旗下模型社区，中国版Hugging Face，托管Qwen系列等国内主流开源模型，开发者下载量持续增长</span></div>
+              <div class="detail-row"><span class="detail-key">信源</span><span class="detail-val"><a href="https://modelscope.cn/" target="_blank">ModelScope官网</a></span></div>
+            </div>
+          </div>
+
+          <div class="company" id="c-baizhuan">
+            <div class="company-header" onclick="toggleCompany('c-baizhuan')" tabindex="0">
+              <span class="tier-badge t2">T2</span>
+              <span class="company-name">百川智能 <span class="en">Baichuan AI</span></span>
+              <span class="valuation-chip">估值 ~$10亿</span>
+              <span class="company-expand-btn">▾</span>
+            </div>
+            <div class="company-detail">
+              <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$10亿 · 2024 · <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+              <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">王小川创立，Baichuan系列开源+闭源双路线，API对外开放，医疗AI垂直场景布局较深</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layer collapsed" id="l7">
+  <div class="layer-header" onclick="toggleLayer('l7')" tabindex="0" role="button" aria-expanded="false">
+    <span class="layer-label">L7</span>
+    <span class="layer-title">应用层</span>
+    <span class="layer-sublabel">to C / to B / 垂直行业（医疗 / 法律 / 教育 / 代码 / 机器人）</span>
+    <span class="layer-toggle">▾</span>
+  </div>
+  <div class="layer-body" id="l7-body" style="max-height:0">
+    <!-- L7-A to C -->
+    <div class="sublayer">
+      <div class="sublayer-title">L7-A · to C（消费端）</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+
+            <div class="company" id="c-chatgpt">
+              <div class="company-header" onclick="toggleCompany('c-chatgpt')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">ChatGPT <span class="en">OpenAI</span></span>
+                <span class="valuation-chip">MAU ~3亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全球最大AI助手产品，月活3亿+（2025），订阅制Plus/Pro，企业版API，定义了"AI对话"这一品类</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2022-11</span><span>发布，5天达100万用户，2个月破亿</span></div>
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-05</span><span>GPT-4o发布，实时语音交互，情感表达能力跃升</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-perplexity">
+              <div class="company-header" onclick="toggleCompany('c-perplexity')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Perplexity AI</span>
+                <span class="valuation-chip">估值 ~$90亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">投后估值 ~$90亿 · 2024-11 · <a href="https://www.crunchbase.com/organization/perplexity-ai" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI搜索引擎，引用来源可验证，日均查询量数千万，正面挑战Google搜索场景</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2022</span><span>创立，前OpenAI/Google研究员团队</span></div>
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2024-11</span><span>融资$5亿，估值$90亿，SoftBank参投</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-claude-app">
+              <div class="company-header" onclick="toggleCompany('c-claude-app')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">Claude.ai <span class="en">Anthropic</span></span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">Anthropic消费端产品，以长文本处理和编程能力见长，企业用户占比较高，C端认知度弱于ChatGPT</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+
+            <div class="company" id="c-doubao">
+              <div class="company-header" onclick="toggleCompany('c-doubao')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">豆包 <span class="en">Doubao</span></span>
+                <span class="valuation-chip">字节跳动旗下</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内C端AI助手月活第一，字节跳动出品，强绑定抖音/今日头条流量入口，增长速度最快</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-08</span><span>豆包App发布</span></div>
+                  <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024</span><span>月活突破5000万，国内AI App第一</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-kimi-app">
+              <div class="company-header" onclick="toggleCompany('c-kimi-app')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Kimi <span class="en">月之暗面</span></span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">超长上下文差异化，以"能读很长文档"破圈，学生和研究用户占比高，国内C端AI认知度前三</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-10</span><span>Kimi Chat发布，主打长文档</span></div>
+                  <div class="milestone"><span class="ms-icon">🔬</span><span class="ms-date">2024-03</span><span>开放100万token上下文，热度爆发</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-quark">
+              <div class="company-header" onclick="toggleCompany('c-quark')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">夸克 <span class="en">Quark / 阿里</span></span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">阿里旗下搜索+AI助手App，主打学生群体，通义千问能力整合，网盘+AI结合是差异化点</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L7-B to B -->
+    <div class="sublayer">
+      <div class="sublayer-title">L7-B · to B（企业端）</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+
+            <div class="company" id="c-mscopilot">
+              <div class="company-header" onclick="toggleCompany('c-mscopilot')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Microsoft 365 Copilot</span>
+                <span class="valuation-chip">Microsoft旗下</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">企业AI助手最大规模部署，整合Word/Excel/Teams/Outlook，$30/人/月，覆盖Fortune 500最广</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-11</span><span>Microsoft 365 Copilot正式GA</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-salesforce-ai">
+              <div class="company-header" onclick="toggleCompany('c-salesforce-ai')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Salesforce Einstein / Agentforce</span>
+                <span class="valuation-chip">市值 ~$2800亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">Salesforce市值 ~$2800亿 · 2026-09 · <a href="https://www.nyse.com/quote/XNYS:CRM" target="_blank">NYSE: CRM</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">CRM+AI领导者，Agentforce是2024年最受关注的企业AI Agent平台之一，按对话次数计费</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024-09</span><span>Agentforce发布，企业AI Agent平台</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-servicenow-ai">
+              <div class="company-header" onclick="toggleCompany('c-servicenow-ai')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">ServiceNow AI</span>
+                <span class="valuation-chip">市值 ~$2000亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~$2000亿 · 2026-09 · <a href="https://www.nyse.com/quote/XNYS:NOW" target="_blank">NYSE: NOW</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">IT服务管理+企业AI流程自动化，Now Intelligence整合大模型，企业工作流自动化场景</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+
+            <div class="company" id="c-zhiyuan-b">
+              <div class="company-header" onclick="toggleCompany('c-zhiyuan-b')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">阶跃星辰 / 智谱AI（B端）</span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内大模型B端API服务主力，智谱以金融/政务客户为主，阶跃星辰主攻多模态企业场景</span></div>
+              </div>
+            </div>
+
+            <div class="company" id="c-iflytek">
+              <div class="company-header" onclick="toggleCompany('c-iflytek')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">科大讯飞 <span class="en">iFlytek</span></span>
+                <span class="valuation-chip">市值 ~¥1100亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ~¥1100亿 · 2026-09 · <a href="https://www.sse.com.cn/" target="_blank">科创板 002230</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">语音AI老牌企业，讯飞星火大模型，教育/政务/医疗B端客户深度，国资背景强</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023-05</span><span>讯飞星火大模型1.0发布</span></div>
+                </div></span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- L7-C 垂直行业 -->
+    <div class="sublayer">
+      <div class="sublayer-title">L7-C · 垂直行业</div>
+
+      <!-- 代码 -->
+      <div style="padding:8px 0 4px;font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.3px;">💻 代码 / 开发工具</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-cursor">
+              <div class="company-header" onclick="toggleCompany('c-cursor')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Cursor <span class="en">Anysphere</span></span>
+                <span class="valuation-chip">估值 ~$90亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$90亿 · 2024-08 · <a href="https://www.crunchbase.com/organization/anysphere" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">AI代码编辑器，ARR增长最快的开发工具，Vibe Coding场景定义者，$20/月订阅，开发者口碑第一</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2024-08</span><span>融资$6000万，估值$4亿；同年再融资估值$90亿</span></div>
+                </div></span></div>
+              </div>
+            </div>
+            <div class="company" id="c-github-copilot">
+              <div class="company-header" onclick="toggleCompany('c-github-copilot')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">GitHub Copilot <span class="en">Microsoft</span></span>
+                <span class="valuation-chip">Microsoft旗下</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">付费用户最多的AI编程助手，150万+付费用户（2024），VS Code深度整合，企业版覆盖广</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2021-06</span><span>GitHub Copilot Technical Preview发布</span></div>
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2022-06</span><span>正式GA，$10/月</span></div>
+                </div></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-tongyi-lingma">
+              <div class="company-header" onclick="toggleCompany('c-tongyi-lingma')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">通义灵码 <span class="en">阿里云</span></span>
+                <span class="valuation-chip">阿里云旗下</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内AI编程助手用户量最大，阿里云出品，免费策略，VS Code/JetBrains插件，企业版覆盖大量国内开发者</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 机器人 -->
+      <div style="padding:16px 0 4px;font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.3px;">🤖 具身智能 / 机器人</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-figure">
+              <div class="company-header" onclick="toggleCompany('c-figure')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Figure AI</span>
+                <span class="valuation-chip">估值 ~$39亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$39亿 · 2024-02 · <a href="https://www.crunchbase.com/organization/figure-ai" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">人形机器人，与OpenAI合作整合大模型感知，宝马工厂试点，投资方含微软/亚马逊/英伟达</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2024-02</span><span>融资$6.75亿，微软/OpenAI/英伟达/亚马逊联合参投</span></div>
+                </div></span></div>
+              </div>
+            </div>
+            <div class="company" id="c-physicalintelligence">
+              <div class="company-header" onclick="toggleCompany('c-physicalintelligence')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Physical Intelligence (π)</span>
+                <span class="valuation-chip">估值 ~$24亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$24亿 · 2024-11 · <a href="https://www.crunchbase.com/organization/physical-intelligence" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">机器人基础模型（π0），前Google/DeepMind/OpenAI核心研究员创立，目标是机器人领域的"GPT-4"</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-unitree">
+              <div class="company-header" onclick="toggleCompany('c-unitree')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">宇树科技 <span class="en">Unitree</span></span>
+                <span class="valuation-chip">估值 ~$10亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$10亿 · 2024 · <a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内四足+人形机器人出货量最大，H1人形机器人全球热销，价格远低于竞品，出口占比高</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2023</span><span>H1人形机器人发布，$9万售价震惊业界</span></div>
+                  <div class="milestone"><span class="ms-icon">📦</span><span class="ms-date">2024</span><span>G1人形机器人发布，$16000起，量产交付</span></div>
+                </div></span></div>
+              </div>
+            </div>
+            <div class="company" id="c-zhiyuanrobot">
+              <div class="company-header" onclick="toggleCompany('c-zhiyuanrobot')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">智元机器人 / 傅利叶 / 银河通用</span>
+                <span class="valuation-chip">新兴梯队</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内人形机器人第二梯队，均于2023年前后成立，稚晖君（智元）、傅利叶（外骨骼起家）、银河通用（具身AI基础模型路线）</span></div>
+                <div class="detail-row"><span class="detail-key">信源</span><span class="detail-val"><a href="https://www.itjuzi.com/" target="_blank">IT桔子融资记录</a></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 医疗 -->
+      <div style="padding:16px 0 4px;font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.3px;">🏥 医疗 AI</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-abridge">
+              <div class="company-header" onclick="toggleCompany('c-abridge')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Abridge</span>
+                <span class="valuation-chip">估值 ~$8.5亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$8.5亿 · 2024-02 · <a href="https://www.crunchbase.com/organization/abridge" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">医生-患者对话实时转录+结构化病历生成，接入Epic电子病历系统，大型医院系统采购</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-baichuan-med">
+              <div class="company-header" onclick="toggleCompany('c-baichuan-med')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">百川智能（医疗）/ 医联</span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">百川智能医疗大模型布局最深；医联（专科AI）是国内医疗AI较早商业化的平台，均深耕B端医院客户</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 法律 -->
+      <div style="padding:16px 0 4px;font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.3px;">⚖️ 法律 AI</div>
+      <div class="region-grid">
+        <div class="region-col">
+          <div class="region-flag us">🇺🇸 美国</div>
+          <div class="company-list">
+            <div class="company" id="c-harvey">
+              <div class="company-header" onclick="toggleCompany('c-harvey')" tabindex="0">
+                <span class="tier-badge t1">T1</span>
+                <span class="company-name">Harvey AI</span>
+                <span class="valuation-chip">估值 ~$15亿</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">估值 ~$15亿 · 2024-07 · <a href="https://www.crunchbase.com/organization/harvey-ai" target="_blank">Crunchbase</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">法律AI领导者，A&O Shearman等顶级律所客户，合同审查/法律研究/诉状起草，OpenAI战略投资</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">🤝</span><span class="ms-date">2023</span><span>OpenAI战略投资，获GPT-4优先访问权</span></div>
+                </div></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="region-col">
+          <div class="region-flag cn">🇨🇳 中国</div>
+          <div class="company-list">
+            <div class="company" id="c-lvke">
+              <div class="company-header" onclick="toggleCompany('c-lvke')" tabindex="0">
+                <span class="tier-badge t2">T2</span>
+                <span class="company-name">幂律智能 / 法狗狗</span>
+                <span class="valuation-chip">—</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内法律AI处于早期阶段，主要为中小律所提供合同审查/法条检索工具，尚无全国头部玩家</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLayer(id) {
+  const layer = document.getElementById(id);
+  const body = document.getElementById(id + '-body');
+  const isCollapsed = layer.classList.contains('collapsed');
+  const header = layer.querySelector('.layer-header');
+
+  if (isCollapsed) {
+    layer.classList.remove('collapsed');
+    header.setAttribute('aria-expanded', 'true');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    // allow natural height after transition
+    body.addEventListener('transitionend', function onEnd() {
+      body.style.maxHeight = 'none';
+      body.removeEventListener('transitionend', onEnd);
+    });
+  } else {
+    // freeze current height before collapsing
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      layer.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      body.style.maxHeight = '0';
+    });
+  }
+}
+
+function toggleCompany(id) {
+  const company = document.getElementById(id);
+  company.classList.toggle('open');
+}
+
+// keyboard support
+document.querySelectorAll('.layer-header, .company-header').forEach(el => {
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      el.click();
+    }
+  });
+});
+
+// init: set correct max-height for expanded layers
+document.querySelectorAll('.layer:not(.collapsed) .layer-body').forEach(body => {
+  body.style.maxHeight = 'none';
+});
+</script>
+</body>
+</html>
