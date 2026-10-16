@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 产业链全景图 v1.3</title>
+<title>AI 产业链全景图 v1.5</title>
 <style>
   :root {
     --n-50:#f7f7f8;--n-100:#ededf0;--n-200:#d8d8de;--n-300:#b4b4be;--n-400:#8e8e9e;
@@ -52,6 +52,7 @@
   .tier-badge.t2{background:var(--n-100);color:var(--n-600);}
   .tier-badge.t3{background:var(--n-50);color:var(--n-400);border:1px solid var(--border);}
   .tier-badge.open{background:#d1fae5;color:#065f46;}
+  .tier-badge.warn{background:#fef3c7;color:#92400e;}
   .company-name{font-size:13px;font-weight:700;color:var(--n-900);flex:1;}
   .company-name .en{font-size:11px;font-weight:400;color:var(--text-muted);margin-left:4px;}
   .valuation-chip{font-size:11px;color:var(--text-muted);white-space:nowrap;}
@@ -86,11 +87,11 @@
 <body>
 <div class="header">
   <h1>🗺 AI 产业链全景图</h1>
-  <div class="meta"><span><strong>v1.3</strong> · 2026-10</span><span>中美双轨 · Tier 排序 · 月度更新</span></div>
+  <div class="meta"><span><strong>v1.5</strong> · 2026-10</span><span>中美双轨 · Tier 排序 · 月度更新</span></div>
 </div>
 <div class="version-bar">
-  <span><strong>版本:</strong> v1.3</span>
-  <span><strong>更新日期:</strong> 2026-10-14</span>
+  <span><strong>版本:</strong> v1.5</span>
+  <span><strong>更新日期:</strong> 2026-10-16</span>
   <span><strong>排序:</strong> 同层按 Tier 分组 → Tier 内按硬数值降序</span>
   <span><strong>⚠️</strong> 估值超12个月标黄</span>
 </div>
@@ -212,14 +213,87 @@
                 </div></span></div>
               </div>
             </div>
-            <div class="company" id="c-biren">
-              <div class="company-header" onclick="toggleCompany('c-biren')" tabindex="0">
-                <span class="tier-badge t3">T3</span><span class="company-name">壁仞 / 摩尔线程 / 天数智芯</span>
-                <span class="valuation-chip">新兴挑战者</span><span class="company-expand-btn">▾</span>
+            <div class="company" id="c-metax">
+              <div class="company-header" onclick="toggleCompany('c-metax')" tabindex="0">
+                <span class="tier-badge t2">T2</span><span class="company-name">沐曦股份 <span class="en">MetaX</span></span>
+                <span class="valuation-chip">市值 ¥1612亿</span><span class="company-expand-btn">▾</span>
               </div>
               <div class="company-detail">
-                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国内GPU新势力，融资数据来源：<a href="https://www.itjuzi.com/" target="_blank">IT桔子</a></span></div>
-                <div class="detail-row"><span class="detail-key">备注</span><span class="detail-val">三家路线各异（壁仞GPGPU、摩尔线程消费+云、天数智芯训练），估值待细化</span></div>
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ¥1612.36亿 · 2026-10-15（收盘402.99元）· <a href="https://www.sse.com.cn/" target="_blank">上交所 688802</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">国产通用GPU，自研全栈，曦云C500训推一体芯片，"国产GPU四小龙"之一。五家中第一个实现主营盈利</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2025-12-17</span><span>科创板上市（688802.SH），募资38.99亿元，国产GPU第二股</span></div>
+                  <div class="milestone"><span class="ms-icon">📈</span><span class="ms-date">2026-10-16</span><span>前三季度业绩预告：营收25.41~31.06亿（+105.6%~151.3%），归母净利5.87~7.17亿，首次扭亏为盈</span></div>
+                </div></span></div>
+                <div class="note">⚠️ 利润增长部分来自"对产业链公司投资增加"（业绩预告原文），扣非净利2.23~3.02亿为真实经营口径。预告未经审计。</div>
+              </div>
+            </div>
+            <div class="company" id="c-mthreads">
+              <div class="company-header" onclick="toggleCompany('c-mthreads')" tabindex="0">
+                <span class="tier-badge t2">T2</span><span class="company-name">摩尔线程 <span class="en">Moore Threads</span></span>
+                <span class="valuation-chip">市值 ¥1510亿</span><span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ¥1510.06亿 · 2026-10-15（收盘321.27元，当日-4.95%）· <a href="https://www.sse.com.cn/" target="_blank">上交所 688795</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">全功能GPU，图形渲染+AI计算双路线，创始人张建中原英伟达中国区总经理。2026H1营收17.36亿（+147%）</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2025-12-05</span><span>科创板上市，发行价114.28元，首日涨425.5%，募资75.76亿</span></div>
+                  <div class="milestone"><span class="ms-icon">📉</span><span class="ms-date">2026-09-07</span><span>解禁日20CM跌停，市值从4月高点3001亿跌至1953亿</span></div>
+                </div></span></div>
+                <div class="note">⚠️ 市值轨迹：上市首日冲至4400亿 → 2026-10 回落至1510亿。2026-12-07 另有约1.9亿股解禁（占总股本39.6%），规模为9月那次的7倍，为已知风险点。</div>
+              </div>
+            </div>
+            <div class="company" id="c-biren">
+              <div class="company-header" onclick="toggleCompany('c-biren')" tabindex="0">
+                <span class="tier-badge t2">T2</span><span class="company-name">壁仞科技 <span class="en">Biren</span></span>
+                <span class="valuation-chip">市值 ~706亿港元</span><span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">总市值约706亿港元（HK$25.88 × 27.30亿股）· 2026-10-16 · <a href="https://www.hkex.com.hk/" target="_blank">港交所 06082.HK</a></span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">GPGPU路线，2026H1营收12.36亿（+1997%，但从极低基数起算），仍亏3.77亿。上市以来累计募资172.61亿港元，居国产GPU之首</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2026-01-02</span><span>港股上市（06082.HK），发行价19.6港元</span></div>
+                  <div class="milestone"><span class="ms-icon">📉</span><span class="ms-date">2026-10</span><span>两次配售（46.20港元降至31.8港元，折让9.76%），股价较高点回落</span></div>
+                </div></span></div>
+                <div class="note">⚠️ 招股书自披露：按2024年中国市场收入计，壁仞份额0.16%（智能计算芯片）/ 0.2%（通用GPU）。H股市值口径约386亿港元，与总市值口径差近一倍。</div>
+              </div>
+            </div>
+            <div class="company" id="c-enflame">
+              <div class="company-header" onclick="toggleCompany('c-enflame')" tabindex="0">
+                <span class="tier-badge t3">T3</span><span class="company-name">燧原科技 <span class="en">Enflame</span></span>
+                <span class="valuation-chip">市值 ¥1820亿</span><span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">市值 ¥1820.22亿 · 2026-10-15（收盘422.96元，当日-1.33%）· <a href="https://www.sse.com.cn/" target="_blank">上交所 688801</a></span></div>
+                <div class="detail-row"><span class="detail-key">上市</span><span class="detail-val">2026-09-11 科创板上市（688801.SH），募资58.10亿人民币</span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">腾讯系背景，邃思系列AI训练/推理芯片，主打云端AI加速卡</span></div>
+                <div class="note">⚠️ 2026-09-11 上市，至今不足两个月，市值波动较大，Tier 归属宜待首个完整报告期后再评估。</div>
+              </div>
+            </div>
+            <div class="company" id="c-iluvatar">
+              <div class="company-header" onclick="toggleCompany('c-iluvatar')" tabindex="0">
+                <span class="tier-badge t3">T3</span><span class="company-name">天数智芯 <span class="en">Iluvatar CoreX</span></span>
+                <span class="valuation-chip">市值 ~654亿港元</span><span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">定价</span><span class="detail-val">总市值约654亿港元（HK$81.00 × 8.075亿股）· 2026-10-16 10:41 HKT · <a href="https://www.hkex.com.hk/" target="_blank">港交所 09903.HK</a></span></div>
+                <div class="detail-row"><span class="detail-key">上市</span><span class="detail-val">2026-01-08 港股上市（09903.HK），发行价144.6港元，募资105.43亿港元</span></div>
+                <div class="detail-row"><span class="detail-key">定位</span><span class="detail-val">GPGPU路线，主打AI训练，天垓100/智铠系列，国内较早实现通用GPU量产的公司之一</span></div>
+                <div class="detail-row"><span class="detail-key">里程碑</span><span class="detail-val"><div class="milestones">
+                  <div class="milestone"><span class="ms-icon">💰</span><span class="ms-date">2026-01-08</span><span>港股上市（09903.HK），发行价144.6港元，募资105.43亿港元</span></div>
+                  <div class="milestone"><span class="ms-icon">📉</span><span class="ms-date">2026-10-16</span><span>股价回落至81港元附近，较发行价144.6港元下跌约44%</span></div>
+                </div></span></div>
+                <div class="note">⚠️ 总股本 8.075亿股（东方财富口径）。交叉验证：Yahoo Finance 于股价79.80港元时报市值644.4亿港元，折算股本一致。</div>
+              </div>
+            </div>
+            <div class="company" id="c-gpu-share-note">
+              <div class="company-header" onclick="toggleCompany('c-gpu-share-note')" tabindex="0">
+                <span class="tier-badge warn">!</span><span class="company-name">行业地位警示</span>
+                <span class="company-expand-btn">▾</span>
+              </div>
+              <div class="company-detail">
+                <div class="detail-row"><span class="detail-key">事实</span><span class="detail-val">按壁仞招股书披露（2024年中国市场收入口径）：<strong>英伟达 + 华为海思合计占 94.4%</strong>；其余超过15家规模化参与者中，无一家份额超过1%</span></div>
+                <div class="note">⚠️ 以上市值排序反映资本市场预期，不代表实际市场份额。判断地位时两个口径需分开看。该份额数据源自壁仞自身招股书，未经第三方研究机构交叉验证。</div>
               </div>
             </div>
           </div>
